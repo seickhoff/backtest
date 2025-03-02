@@ -1,0 +1,34 @@
+{
+  "name": "backtest",
+  "version": "1.0.0",
+  "description": "NodeJS Backtest",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seickhoff/backtest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seickhoff/backtest/issues"
+  },
+  "homepage": "https://github.com/seickhoff/backtest#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pureimage": "^0.4.18",
+    "yahoo-finance2": "^2.13.3"
+  }
+}
