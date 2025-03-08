@@ -2,6 +2,8 @@ import express from 'express';
 import yahooFinance from 'yahoo-finance2';
 import * as PImage from "pureimage";
 
+import {process, processImage, imageline, imagefilledrectangle, imagestring} from "./lib/process";
+
 // php code that draws chart
 // https://github.com/seickhoff/eickhoff-stock-charts/blob/master/eickhoff.stock.charts.php
 
@@ -23,23 +25,21 @@ app.get('/', async (req, res) => {
 
 
     const query = 'PYPL';
-    const queryOptions = { period1: '2025-01-01', /* ... */ };
+    const queryOptions = { period1: '2025-02-14', /* ... */ };
     const result = await yahooFinance.historical(query, queryOptions);
 
     console.dir(result, { depth: null })
+
+    process(result);
 
     res.send(result);
 });
 
 app.get("/image", async (req, res) => {
     try {
-        // Create an image
-        const img = PImage.make(100, 100);
-        const ctx = img.getContext("2d");
 
-        // Fill with red
-        ctx.fillStyle = "red";
-        ctx.fillRect(0, 0, 100, 100);
+
+        const img = await processImage();
 
         // Set response headers
         res.setHeader("Content-Type", "image/png");
@@ -84,6 +84,10 @@ app.get("/flag", async (req, res) => {
 
         // Restore to previous state (undo translation & rotation)
         context.restore();
+
+        imageline(context, 0, 0, 90, 90, "#F4F9FF");
+        imagefilledrectangle(context, 100, 10, 110, 80, "#F4F9FF");
+        imagestring(context, 16, 10, 10, "Scott", "#F4F9FF");
 
         // Set response headers
         res.setHeader("Content-Type", "image/png");

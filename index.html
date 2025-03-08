@@ -1,0 +1,341 @@
+<html>
+
+<head>
+    <style>
+        @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
+
+        body {
+            margin: 10px;
+            background-color: #000000;
+        }
+
+        input {
+            font-family: courier;
+        }
+
+        input,
+        label {
+            width: 160px;
+        }
+
+        td {
+            font-size: 13px;
+            text-align: right;
+            font-family: arial;
+            color: #A000FF;
+        }
+
+        .refreshLink {
+            color: #FF00FF;
+            font-family: arial;
+        }
+
+        .rightMargin {
+            margin-right: 32px;
+        }
+
+        span.glyphicon {
+            font-size: 1.2em;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        var viewport = document.createElement("meta");
+        viewport.setAttribute('name', 'viewport');
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1');
+        document.getElementsByTagName('head')[0].appendChild(viewport);
+
+        addLoadEvent(function () {
+            autoDate();
+        });
+
+        function addLoadEvent(func) {
+            var oldonload = window.onload;
+            if (typeof window.onload != 'function') {
+                window.onload = func;
+            } else {
+                window.onload = function () {
+                    if (oldonload) {
+                        oldonload();
+                    }
+                    func();
+                };
+            }
+        }
+
+        function autoDate() {
+            var monthsBack = 1;
+            var currentTime = new Date();
+            var year = currentTime.getFullYear();
+            var month = currentTime.getMonth() + 1;
+
+            month = month.toString();
+            if (month.length == 1) month = "0" + month;
+
+            var day = currentTime.getDate();
+            if (day < 10) day = "0" + day;
+
+            var end = year + month + day;
+            document.myForm.end.value = end;
+
+            var myDate = new Date();
+            myDate.setDate(myDate.getDate() - 42);
+
+            year = myDate.getFullYear();
+            month = myDate.getMonth() + 1;
+            day = myDate.getDate();
+
+            if (day < 10) day = "0" + day;
+            if (month < 10) month = "0" + month;
+
+            document.myForm.start.value = year + "" + month + "" + day;
+        }
+
+        function imgFunction() {
+
+            document.body.style.cursor = 'wait';
+            window.defaultStatus = "Loading...";
+
+            var f = document.forms.myForm;
+
+            var sendVars = "?symbol=" + f.symbol.value;
+            sendVars += "&start=" + f.start.value;
+            sendVars += "&end=" + f.end.value;
+
+            if (f.vol.value !== "") sendVars += "&vol=" + f.vol.value;
+            if (f.height.value !== "") sendVars += "&height=" + f.height.value;
+            if (f.lowerheight.value !== "") sendVars += "&lowerheight=" + f.lowerheight.value;
+            if (f.bol.value !== "") sendVars += "&bol=" + f.bol.value;
+            if (f.pc.value !== "") sendVars += "&pc=" + f.pc.value;
+            if (f.sma1.value !== "") sendVars += "&sma1=" + f.sma1.value;
+            if (f.sma2.value !== "") sendVars += "&sma2=" + f.sma2.value;
+            if (f.ema1.value !== "") sendVars += "&ema1=" + f.ema1.value;
+            if (f.ema2.value !== "") sendVars += "&ema2=" + f.ema2.value;
+            if (f.macd.value !== "") sendVars += "&macd=" + f.macd.value;
+            if (f.rsi.value !== "") sendVars += "&rsi=" + f.rsi.value;
+            if (f.mfi.value !== "") sendVars += "&mfi=" + f.mfi.value;
+            if (f.adx.value !== "") sendVars += "&adx=" + f.adx.value;
+            if (f.col.value !== "") sendVars += "&col=" + f.col.value;
+            if (f.crop.value !== "") sendVars += "&crop=" + f.crop.value;
+            if (f.adl.value !== "") sendVars += "&adl=" + f.adl.value;
+            if (f.thick.value !== "") sendVars += "&thick=" + f.thick.value;
+            if (f.fib.value !== "") sendVars += "&fib=" + f.fib.value;
+            if (f.cand.value !== "") sendVars += "&cand=" + f.cand.value;
+
+            sendVars += "&time=" + Math.round(new Date().getTime() / 1000);
+
+            var img = document.createElement('img');
+            img.onload = function (e) {
+                document.getElementById("imgHolder").src = "eickhoff.stock.charts.php" + sendVars;
+                window.defaultStatus = sendVars;
+                document.body.style.cursor = 'default';
+            };
+            img.onerror = function (e) {
+                alert("Error processing Image.  Please try again.");
+                document.body.style.cursor = 'default';
+                window.defaultStatus = "Done";
+            };
+            img.src = 'eickhoff.stock.charts.php' + sendVars;
+            document.getElementById("response").innerHTML = '<br/><center><a targer="_img" href="eickhoff.stock.charts.php' + sendVars + '">View actual size</a></center>';
+
+        }
+
+        //$('.collapse-header').on('click', function () {
+        //	$($(this).data('toggle')).collapse('toggle');
+        //});
+    </script>
+</head>
+
+<body>
+    <!-- http://www.bootstrapcdn.com/ -->
+    <div class="container">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <span>Eickhoff Stock Charts</span>
+                        <a class="refreshLink pull-right" href="javascript:imgFunction()">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        </a>
+                        <a class="rightMargin pull-right" role="button" data-toggle="collapse" data-parent="#accordion"
+                            href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+
+
+                    </h4>
+
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <form class="form-inline" name="myForm">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="symbol">Symbol</label>
+                                        <input type="text" class="form-control" name="symbol" id="symbol"
+                                            placeholder="ticker" value="AAPL" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="start">Start date</label>
+                                        <input type="text" class="form-control" name="start" id="start"
+                                            placeholder="yyyymmdd" value="20100301" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="end">End date</label>
+                                        <input type="text" class="form-control" name="end" id="end"
+                                            placeholder="yyyymmdd" value="20100611" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="vol">Volume</label>
+                                        <input type="text" class="form-control" name="vol" id="vol" placeholder="y or n"
+                                            value="y" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="crop">Range crop</label>
+                                        <input type="text" class="form-control" name="crop" id="crop"
+                                            placeholder="y or n" value="y" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="bol">Bollinger</label>
+                                        <input type="text" class="form-control" name="bol" id="bol"
+                                            placeholder="days,stdDev" value="20,2" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="fib">Fibonacci</label>
+                                        <input type="text" class="form-control" name="fib" id="fib" placeholder="y or n"
+                                            value="y" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="cand">Candles</label>
+                                        <input type="text" class="form-control" name="cand" id="cand"
+                                            placeholder="y or n" value="y" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="pc">Price channel</label>
+                                        <input type="text" class="form-control" name="pc" id="pc" placeholder="days"
+                                            value="" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="sma1">SMA 1</label>
+                                        <input type="text" class="form-control" name="sma1" id="sma1" placeholder="days"
+                                            value="50" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="sma2">SMA 2</label>
+                                        <input type="text" class="form-control" name="sma2" id="sma2" placeholder="days"
+                                            value="200" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="ema1">EMA 1</label>
+                                        <input type="text" class="form-control" name="ema1" id="ema1" placeholder="days"
+                                            value="" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="ema2">EMA 2</label>
+                                        <input type="text" class="form-control" name="ema2" id="ema2" placeholder="days"
+                                            value="" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="macd">MACD</label>
+                                        <input type="text" class="form-control" name="macd" id="macd"
+                                            placeholder="fast,slow,avg" value="12,26,9" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="rsi">RSI</label>
+                                        <input type="text" class="form-control" name="rsi" id="rsi" placeholder="days"
+                                            value="14" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="adx">ADX</label>
+                                        <input type="text" class="form-control" name="adx" id="adx" placeholder="days"
+                                            value="14" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="adl">Accum/Dist</label>
+                                        <input type="text" class="form-control" name="adl" id="adl" placeholder="y or n"
+                                            value="y" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="mfi">MFI</label>
+                                        <input type="text" class="form-control" name="mfi" id="mfi" placeholder="days"
+                                            value="14" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="height">Upper height</label>
+                                        <input type="text" class="form-control" name="height" id="height"
+                                            placeholder="pixels" value="400" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="lowerheight">Lower height</label>
+                                        <input type="text" class="form-control" name="lowerheight" id="lowerheight"
+                                            placeholder="pixels" value="150" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="thick">Thickness</label>
+                                        <input type="text" class="form-control" name="thick" id="thick"
+                                            placeholder="pixels" value="1" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="form-group">
+                                        <label for="col">Day Width</label>
+                                        <input type="text" class="form-control" name="col" id="col"
+                                            placeholder="px,px,px" value="18,12,15" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img class="img-responsive" id="imgHolder" style=" margin-left: auto; margin-right: auto;" />
+        <p id="response"></p>
+    </div>
+</body>
+
+</html>
