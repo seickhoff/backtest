@@ -16,10 +16,7 @@ const app = express();
 const port = 3000;
 
 
-// Register font globally (only once)
-const fontPath = "src/fonts/SourceSansPro-Regular.ttf";
-const fnt = PImage.registerFont(fontPath, "Source Sans Pro");
-fnt.loadSync(); // Load font once at startup
+
 
 app.get('/', async (req, res) => {
 
